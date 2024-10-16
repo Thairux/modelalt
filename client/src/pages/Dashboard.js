@@ -1,3 +1,4 @@
+//client/src/pages |the old one
 import React from 'react';
 
 const Dashboard = () => {

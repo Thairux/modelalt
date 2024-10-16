@@ -1,3 +1,4 @@
+//client/src/pages
 import React, { useState } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
@@ -12,14 +13,25 @@ const Login = () => {
         try {
             const response = await axios.post('/api/auth/login', { username, password });
             localStorage.setItem('token', response.data.token); // Store the token
+
             alert('Login successful!');
-            navigate('/dashboard'); // Redirect to the dashboard
-        } catch (error) {
-            if (error.response) {
-                alert(error.response.data.message);
+
+            // Decode the token to get the user's role
+            const decodedToken = JSON.parse(atob(response.data.token.split('.')[1]));
+            const userRole = decodedToken.role;
+
+            // Redirect based on role
+            if (userRole === 'agency') {
+                navigate('/agency-dashboard'); // Route for agencies
+            } else if (userRole === 'model') {
+                navigate('/model-dashboard'); // Route for models
+            } else if (userRole === 'designer') {
+                navigate('/designer-dashboard'); // Route for designers
             } else {
-                alert('Login failed: ' + error.message);
+                navigate('/dashboard'); // Default route if role is unrecognized
             }
+        } catch (error) {
+            alert('Error: ' + error.response.data.message);
         }
     };
 

@@ -1,21 +1,19 @@
+//client/src/pages
 import React, { useState } from 'react';
 import axios from 'axios';
 
 const Register = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const [role, setRole] = useState('model'); // Default to model
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            await axios.post('/api/auth/register', { username, password });
-            alert('Registration successful! You can now log in.');
+            await axios.post('/api/auth/register', { username, password, role });
+            alert('Registration successful!');
         } catch (error) {
-            if (error.response) {
-                alert(error.response.data.message);
-            } else {
-                alert('Registration failed: ' + error.message);
-            }
+            alert('Error: ' + error.response.data.message);
         }
     };
 
@@ -36,6 +34,11 @@ const Register = () => {
                 onChange={(e) => setPassword(e.target.value)} 
                 required 
             />
+            <select value={role} onChange={(e) => setRole(e.target.value)}>
+                <option value="model">Model</option>
+                <option value="designer">Designer</option>
+                <option value="agency">Agency</option>
+            </select>
             <button type="submit">Register</button>
         </form>
     );
