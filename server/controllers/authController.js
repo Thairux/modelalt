@@ -1,4 +1,4 @@
-require('dotenv').config(); // Ensure environment variables are loaded
+require('dotenv').config();
 const User = require('../models/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -14,14 +14,13 @@ const registerUser = async (req, res) => {
 
         res.status(201).json({ message: 'User registered successfully' });
     } catch (error) {
-        console.error('Registration error:', error); // Log the error for debugging
+        console.error('Registration error:', error);
         res.status(400).json({ error: error.message });
     }
 };
 
 // Login User
 const loginUser = async (req, res) => {
-    console.log(req.body); // Log the request body for debugging
     const { username, password } = req.body;
 
     if (!username || !password) {
@@ -42,7 +41,7 @@ const loginUser = async (req, res) => {
         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
         res.status(200).json({ token });
     } catch (error) {
-        console.error('Login error:', error); // Log the error for debugging
+        console.error('Login error:', error);
         res.status(500).json({ message: 'Internal server error' });
     }
 };

@@ -1,29 +1,24 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Login = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const navigate = useNavigate();
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            // Log the input values for debugging
-            console.log('Attempting to log in with:', { username, password });
-
             const response = await axios.post('/api/auth/login', { username, password });
-            alert('Login successful! Token: ' + response.data.token);
-            
-            // Optionally store the token in local storage or state
             localStorage.setItem('token', response.data.token); // Store the token
+            alert('Login successful!');
+            navigate('/dashboard'); // Redirect to the dashboard
         } catch (error) {
-            // Check if error response exists
             if (error.response) {
-                console.error('Login error response:', error.response.data); // Log the error response for debugging
-                alert(error.response.data.message); // Use the error message from the server
+                alert(error.response.data.message);
             } else {
-                console.error('Login failed:', error.message); // Log the fallback error
-                alert('Login failed: ' + error.message); // Fallback for other errors
+                alert('Login failed: ' + error.message);
             }
         }
     };
